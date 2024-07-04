@@ -9,7 +9,6 @@ import Box from './component/Box';
 // 5. 3, 4의 결과를 갖고 누가 이겼는지 판단
 // 6.승패에 따라 테두리 색 변경(승-초록, 지면-빨강, 비기면-검정)
 
-
 const choice = {
   rock:{
     name: "Rock",
@@ -27,35 +26,78 @@ const choice = {
 
 function App() {
   const [userSelect, setUserSelect] = useState(null)
-  const [comImage, setComImage] = useState()
+  const [computerSelect, setComputerSelect] = useState(null)
+  const [result, setResult] = useState("")
+  const [counter, setCounter] = useState("")
 
   const play=(userChoice)=>{
     setUserSelect(choice[userChoice])
-    console.log(userChoice, "choice")
+    let computerChoice = randomChoice()
+    setComputerSelect(computerChoice)
+    setResult(judgement(choice[userChoice], computerChoice));
+    setCounter(counterresult(choice[userChoice], computerChoice));
   }
 
-  const getImage = () =>{
-    setComImage(Math.floor(Math.random(choice.img) * choice.length))
-    console.log(comImage, "image")
+  // user 승패 판단 
+  const judgement = (user, computer) => {
+      if(user.name === computer.name){
+        return "tie"
+      }else if(user.name ==="Rock") return computer.name==="Scissors"?"win":"lose"
+      else if(user.name ==="Scissors") return computer.name === "Paper"?"win":"lose"
+      else if(user.name === "Paper") return computer.name === "Rock"?"win":"lose"
+  }
+
+  // computer 승패 판단
+  const counterresult = (user, computer) => {
+    if(user.name === computer.name){
+      return "tie"
+    }else if(user.name ==="Rock") return computer.name==="Scissors"?"lose":"win"
+    else if(user.name ==="Scissors") return computer.name === "Paper"?"lose":"win"
+    else if(user.name === "Paper") return computer.name === "Rock"?"lose":"win"
+  }
+
+// user Border
+  const getUserColor = (result) => {
+    if (result === "win") {
+      return "green";
+    } else if (result === "lose") {
+      return "red";
+    } else {
+      return "purple";
+    }
+  }
+
+  // Computer Border
+  const getComColor = (counter) => {
+    if (counter === "win") {
+      return "green";
+    } else if (counter === "lose") {
+      return "red";
+    } else {
+      return "purple";
+    }
+  }
+
+  const randomChoice=()=>{
+    let itemArray = Object.keys(choice);  //Object.keys: 객체 키값만 뽑아서 배열로 만들어주는 함수
+    let randomItem = Math.floor(Math.random()*itemArray.length);  //Math.floor: 소수점이하를 버리고 정수만 남기는 함수
+    let final = itemArray[randomItem]
+    return choice[final]
   }
 
   return (
     <div>
     <div className = "main">
-        <Box title = "You" item={userSelect}/>
-        <Box title = "Computer" item={comImage}/>
+        <Box title = "You" item={userSelect} result = {result} borderColor={getUserColor(result)}/>
+        <Box title = "Computer" item={computerSelect} result = {counter} borderColor={getComColor(counter)}/>
     </div>
     <div className="main">
-      <button onClick={()=>play("scissors")&&getImage()}>가위</button>
-      <button onClick={()=>play("rock")&&getImage()}>바위</button>
-      <button onClick={()=>play("paper")&&getImage()}>보</button>
+      <button onClick={()=>play("scissors")}>가위</button>
+      <button onClick={()=>play("rock")}>바위</button>
+      <button onClick={()=>play("paper")}>보</button>
     </div>
     </div>
   );
 }
 
 export default App;
-
-// 컴퓨터 랜덤 알고리즘
-// 1. choice 객체에서 사진 갖고 오기
-// 2. 버튼 클릭시 랜덤하게 이미지 출력
