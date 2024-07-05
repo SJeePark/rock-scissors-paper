@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './App.css';
+import './back.css';
 import Box from './component/Box';
+
 
 // 1.박스 2개 - 타이틀, 사진, 결과
 // 2.가위 바위 보 버튼
@@ -29,13 +31,24 @@ function App() {
   const [computerSelect, setComputerSelect] = useState(null)
   const [result, setResult] = useState("")
   const [counter, setCounter] = useState("")
+  const [winCount, setWinCount] = useState(0);
+  const [loseCount, setLoseCount ] = useState(0);
+
 
   const play=(userChoice)=>{
     setUserSelect(choice[userChoice])
     let computerChoice = randomChoice()
     setComputerSelect(computerChoice)
-    setResult(judgement(choice[userChoice], computerChoice));
-    setCounter(counterresult(choice[userChoice], computerChoice));
+    // setResult(judgement(choice[userChoice], computerChoice));
+    const result = judgement(choice[userChoice], computerChoice);
+    setResult(result);
+    const result2 = counterresult(choice[userChoice], computerChoice)
+    setCounter(result2)
+    if (result === "win") {
+      setWinCount(winCount + 1);  // 승리 시 winCount 증가
+    }else if( result === 'lose'){   //패배 시 loseCount 증가
+      setLoseCount(loseCount + 1);
+    }
   }
 
   // user 승패 판단 
@@ -56,27 +69,12 @@ function App() {
     else if(user.name === "Paper") return computer.name === "Rock"?"lose":"win"
   }
 
-// user Border
-  const getUserColor = (result) => {
-    if (result === "win") {
-      return "green";
-    } else if (result === "lose") {
-      return "red";
-    } else {
-      return "purple";
-    }
-  }
+  // user Border
+  const getUserColor = (result) => result === "win" ? "green" : result === "lose" ? "red" : "gray";
+  // Computer Border 
+  const getComColor = (result) => result === "win" ? "green" : result === "lose" ? "red" : "gray";
 
-  // Computer Border
-  const getComColor = (counter) => {
-    if (counter === "win") {
-      return "green";
-    } else if (counter === "lose") {
-      return "red";
-    } else {
-      return "purple";
-    }
-  }
+
 
   const randomChoice=()=>{
     let itemArray = Object.keys(choice);  //Object.keys: 객체 키값만 뽑아서 배열로 만들어주는 함수
@@ -85,18 +83,24 @@ function App() {
     return choice[final]
   }
 
+
   return (
-    <div>
+    <body className = 'background'>
+    <header className='App-header'>가위바위보 게임을 시작하지</header>
+    <p className='sub-title'>5판 3선이닷!!!</p>
     <div className = "main">
-        <Box title = "You" item={userSelect} result = {result} borderColor={getUserColor(result)}/>
-        <Box title = "Computer" item={computerSelect} result = {counter} borderColor={getComColor(counter)}/>
+        <Box className='title' title = "You" item={userSelect} result = {result} borderColor={getUserColor(result)}/>
+        <div className="insert">
+        <button onClick={()=>play("scissors")}>가위</button>
+        <button onClick={()=>play("rock")}>바위</button>
+        <button onClick={()=>play("paper")}>보</button>
+        </div>
+        <Box className='title' title = "Computer" item={computerSelect} result = {counter} borderColor={getComColor(counter)}/>
     </div>
-    <div className="main">
-      <button onClick={()=>play("scissors")}>가위</button>
-      <button onClick={()=>play("rock")}>바위</button>
-      <button onClick={()=>play("paper")}>보</button>
-    </div>
-    </div>
+    <div className="count"><h2>승리 횟수: {winCount}</h2></div>
+    <div className="count"><h2>패배 횟수: {loseCount}</h2></div>
+    <button id='reset'>Reset 아직 구현 못함ㅠㅠ<br></br>주일에 추가로 더 하겠습니다,,</button>
+    </body>
   );
 }
 

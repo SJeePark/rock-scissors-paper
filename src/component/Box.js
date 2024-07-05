@@ -1,5 +1,4 @@
 import React from 'react';
-
 const Box = (props) => {
   return (
     <div className = "Box" style={{ borderColor: props.borderColor }}>
@@ -8,7 +7,5 @@ const Box = (props) => {
       <h2>{props.result}</h2>
     </div>
   )
-
 }
-
 export default Box
