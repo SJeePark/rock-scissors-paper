@@ -3,7 +3,6 @@ import './App.css';
 import './back.css';
 import Box from './component/Box';
 
-
 // 1.박스 2개 - 타이틀, 사진, 결과
 // 2.가위 바위 보 버튼
 // 3.버튼 클릭시 클릭한 값이 박스에 보임
@@ -44,6 +43,7 @@ function App() {
     setResult(result);
     const result2 = counterresult(choice[userChoice], computerChoice)
     setCounter(result2)
+
     if (result === "win") {
       setWinCount(winCount + 1);  // 승리 시 winCount 증가
     }else if( result === 'lose'){   //패배 시 loseCount 증가
