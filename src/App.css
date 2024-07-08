@@ -55,6 +55,19 @@ button:hover{
   font-weight: bold;
 }
 
+.reset{
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.reset:hover{
+  background-color: bisque;
+  color: orange;
+}
 
 /* @media screen and (max-width: 1000px){
   .Box {
